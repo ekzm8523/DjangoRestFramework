@@ -51,7 +51,8 @@ error_messages
 
 
 
-*************************************************
+***************************************************************************************************************************************************
+
 
 3) Request, Response 공식문서 살펴보기
 3-1) Request
@@ -86,3 +87,27 @@ REST Framework에서는 status 모듈 안에 각각의 상태정보를 속성으
 
 status.HTTP_200_OK
 stauts.HTTP_400_BAD_REQUEST
+
+
+***************************************************************************************************************************************************
+
+
+
+3. 임포트한 모듈 이해
+1) APIView
+REST 프레임워크는 Django View 클래스의 하위 클래스로 APIView 클래스를 제공한다. APIView 클래스는 View 클래스와 아래와 같은 점에서 다른 부분이 있다.
+
+Request는 Django의 HttpRequest 인스턴스가 아닌 REST 프레임워크의 request인스턴스가 됨
+Django의 HttpResponse가 아닌 REST 프레임워크의 Response를 반환
+APIException 예외케이스가 발견되면 적절한 response으로 조정됨
+Incoming request를 authenticate하고, 적절한 권한 혹은 throttle(제한사항) 체크한 실행함
+이 외에는 APIView 클래스는 View클래스를 사용하는 것과 동일하다. Incoming request는 .get()이나 .post()와 같은 적절한 핸들러 메서드로 전달된다.
+
+2) get_object_or_404)
+get_object_or_404 함수는 Django Model을 첫번째 인자로 받고, get() 함수에서 전달될 임의의 값을 키워드 인자로 받는다. 만약, 객체가 존재하지 않으면 Http404(page not found)를 띄운다.
+
+article = get_object_or_404(Article, pk=pk)
+4. Function-based view와 비교
+엔드포인트 숫자와 각 엔드포인트의 역할은 완전히 동일하고, 동일한 결과물을 리턴함
+다만, 차이점은 1) Function-based에서는 하나의 View에서 if request.method로 GET/DELETE/UPDATE를 분리한다면, Class-based에서는 def get/delete/update를 명시해 주기에 가독성이 더 좋음
+Function-based에서는 try/except로 특정 객체가 존재하지 않을 때 예외 처리를 했다면, Class-based에서는 def get_object(self, pk)로 처리를 함
