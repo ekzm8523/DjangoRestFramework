@@ -15,3 +15,11 @@ class Article(models.Model):
     
     def __str__(self):
         return f"{ self.author } { self.title }"
+
+class Journalist(models.Model):
+
+    first_name = models.CharField(max_length=120)
+    last_name = models.CharField(max_length=120)
+    biography = models.CharField(max_length=120)
+    def __str__(self):
+        return f"{ self.first_name } { self.last_name } "

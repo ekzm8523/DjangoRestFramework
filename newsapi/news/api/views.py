@@ -3,8 +3,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from news.models import Article
-from news.api.serializers import ArticleSerializer
+from news.models import Article,Journalist
+from news.api.serializers import ArticleSerializer,JournalistSerializer
 # Create your views here.
 
 @api_view(["GET", "POST"])
@@ -88,3 +88,14 @@ class ArticleDetailAPIView(APIView):
         article = self.get_object(pk)
         article.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class JournalistListCreateAPIView(APIView):
+
+    def get(self, request):
+        journalists = Journalist.objects.all()
+        serializer = JournalistSerializer(journalists, many=True,context={'request' : request})
+        return Response(serializer.data)
+
+
+# https://velog.io/@jcinsh/DRF-5-ModelSerializer
